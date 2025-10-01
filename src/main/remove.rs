@@ -31,12 +31,13 @@
 ///
 // Import some modules
 use dialoguer::Input;
-use mcospkg::{Color, PkgInfoToml, get_installed_package_info, rust_remove_pkg};
+use crate::{Color, PkgInfoToml, get_installed_package_info, rust_remove_pkg};
 use std::collections::{HashMap, HashSet};
 use std::io::{self, Write};
 use std::process::exit;
 
 // ========structs define area=========
+#[derive(Debug, Clone)]
 pub struct RemoveData {
     delete_pkgs: Vec<String>,
     package: HashMap<String, PkgInfoToml>,

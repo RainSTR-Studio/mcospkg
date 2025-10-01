@@ -32,7 +32,7 @@
 use colored::Colorize;
 use ctrlc::set_handler;
 use dialoguer::Input;
-use mcospkg::{Color, Message, Package, download, extract, readcfg, rust_install_pkg};
+use crate::{Color, Message, Package, download, extract, readcfg, rust_install_pkg};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{HashMap, HashSet};
@@ -60,6 +60,7 @@ struct PkgIndex {
 }
 
 // =====Public information define area=====
+#[derive(Debug, Clone)]
 pub struct InstallData {
     repoindex: Vec<(String, String)>, // The repository index
     url_total: Vec<String>,           // The repository url

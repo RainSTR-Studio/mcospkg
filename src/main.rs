@@ -32,17 +32,13 @@
 /// For more information, type: `mcospkg -h`
 //
 // Now, we need to import some modules:
-mod main {
-    pub mod install;
-    pub mod remove;
-}
 mod config;
 use clap::{Parser, Subcommand};
+use colored::Colorize;
 use config::VERSION;
 use is_root::is_root;
-use main::install;
-use main::remove;
-use mcospkg::Color;
+use mcospkg::get_installed_package_info;
+use mcospkg::{Color, INSTALL_DATA, REMOVE_DATA};
 use std::process::exit;
 
 // ========structs define area=========
@@ -103,6 +99,13 @@ enum Operations {
         )]
         bypass_ask: bool,
     },
+
+    #[command(about = "List some available package(s)")]
+    List {
+        // Get is list installed packages only.
+        #[arg(long = "installed", short = 'i', help = "List installed packages only")]
+        list_installed_only: bool,
+    },
 }
 
 // ========functions define area==========
@@ -136,6 +139,9 @@ fn main() {
             packages,
             bypass_ask,
         } => remove(&packages, bypass_ask),
+        Operations::List {
+            list_installed_only,
+        } => list(list_installed_only),
     };
 }
 
@@ -149,7 +155,7 @@ fn install(pkglist: Vec<String>, bypass_ask: bool, reinstall: bool) {
     }
 
     // Init the InstallData struct
-    let mut install_data = install::InstallData::new();
+    let mut install_data = INSTALL_DATA.clone();
 
     // Stage 1: Get the pkgindex from the repositories
     install_data.step1_explain_pkg(&pkglist); // Stage 2: Check if the package is exist
@@ -181,7 +187,7 @@ fn install(pkglist: Vec<String>, bypass_ask: bool, reinstall: bool) {
 
 fn remove(pkglist: &[String], bypass_ask: bool) {
     // Init the RemoveData struct
-    let mut remove_data = remove::RemoveData::new();
+    let mut remove_data = REMOVE_DATA.clone();
 
     // Stage 1: Explain the package
     remove_data.step1_explain_pkg();
@@ -196,4 +202,35 @@ fn remove(pkglist: &[String], bypass_ask: bool) {
     remove_data.step4_remove();
 
     // Completed!!!!!!! :)
+}
+
+// This is the remove function
+// =====S====P====L====I====T=====
+// This is the list function
+fn list(list_installed_only: bool) {
+    // Let me see... It's very easy to print the installed
+    // packages' information...
+    //
+    // So let's handle the installed packages first...
+    println!("{}", "====Here are the installed packages====".bold());
+    // First, get the installed packages info.
+    let installed_pkg = get_installed_package_info();
+
+    // This data type is HashMap<String, PkgInfoToml>,
+    // the String is the package name.
+    for (package, info) in &installed_pkg {
+        let version = &info.version;
+        println!(
+            "{} {}, {} {}",
+            "Package".bold().cyan(),
+            package.bold(),
+            "version".bold().cyan(),
+            version.bold()
+        );
+    }
+
+    // This won't be show if list_installed_only set to true.
+    if !list_installed_only {
+        //TODO: Get all packages from each repository
+    }
 }

@@ -3,11 +3,17 @@
 //! So I'll move them to here.
 
 // Import the modules
+mod main {
+    pub mod install;
+    pub mod remove;
+}
 mod pkgmgr;
 use colored::{ColoredString, Colorize};
 use indicatif::{ProgressBar, ProgressStyle};
+use lazy_static::lazy_static;
 use rand::prelude::*;
 use reqwest::blocking::get;
+use main::{install::InstallData, remove::RemoveData};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ffi::{CStr, c_char, c_int};
@@ -26,12 +32,21 @@ pub type Message = std::borrow::Cow<'static, str>;
 pub use pkgmgr::install_pkg as rust_install_pkg;
 pub use pkgmgr::remove_pkg as rust_remove_pkg;
 
+// =====Global Data Define Area=====
+lazy_static! {
+    /// The Global Install Data.
+    pub static ref  INSTALL_DATA: InstallData = InstallData::new();
+
+    /// The Global Remove Data.
+    pub static ref REMOVE_DATA: RemoveData = RemoveData::new();
+}
+
 // =====toml define area=====
 /// This defines the toml format (/etc/mcospkg/database/package.toml)
 ///
 /// It will record the package's dependencies, version, and
 /// so on.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct PkgInfoToml {
     pub dependencies: Vec<String>,
     pub version: String,

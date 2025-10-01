@@ -1,4 +1,3 @@
-plaintext  
 # How to call some APIs of mcospkg
 As an open-source project, it's definitely necessary to write APIs, right [doge]
 
