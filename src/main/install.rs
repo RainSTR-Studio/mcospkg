@@ -52,7 +52,7 @@ struct PkgInfo {
 
 #[derive(Debug, Deserialize, Serialize)]
 struct PkgIndex {
-    // arch: String, // TODO: Support arch
+    arch: String,
     url: String,
     pkgindex: HashMap<String, PkgInfo>,
     baseon: HashMap<String, Vec<String>>,
@@ -158,6 +158,14 @@ impl InstallData {
                 );
                 exit(1);
             });
+
+            // Check is architecture correct
+            let cpu_arch = std::env::consts::ARCH;
+            if index.arch != cpu_arch {
+                println!("{}", color.failed);
+                eprintln!("{}: This repository does not support this platform.", color.error);
+                exit(1);
+            }
 
             // Add them to the total
             self.url_total.push(index.url);
