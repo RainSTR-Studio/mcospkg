@@ -7,7 +7,12 @@ mod main {
     pub mod install;
     pub mod remove;
 }
+pub mod mirror {
+    pub mod update;
+    pub mod add;
+}
 mod pkgmgr;
+mod config;
 use colored::{ColoredString, Colorize};
 use indicatif::{ProgressBar, ProgressStyle};
 use lazy_static::lazy_static;
@@ -31,6 +36,7 @@ pub type Message = std::borrow::Cow<'static, str>;
 // Public area
 pub use pkgmgr::install_pkg as rust_install_pkg;
 pub use pkgmgr::remove_pkg as rust_remove_pkg;
+pub use config::VERSION;
 
 // =====Global Data Define Area=====
 lazy_static! {

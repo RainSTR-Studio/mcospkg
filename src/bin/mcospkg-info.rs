@@ -7,10 +7,9 @@
 // Ok, no more bullshit, let's start!
 
 // First, we need to import some modules:
-mod config;
 use clap::Parser; // To parse argument(info-type)
 use colored::Colorize; // To show colorful text(in var "error")
-use config::VERSION;
+use mcospkg::VERSION;
 use mcospkg::Color;
 
 // And, set up the parser information:

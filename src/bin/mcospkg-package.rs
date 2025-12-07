@@ -21,9 +21,8 @@
 /// ```
 ///
 // Include some modules
-mod config;
 use clap::{Parser, Subcommand};
-use config::VERSION;
+use mcospkg::VERSION;
 use is_root::is_root;
 use mcospkg::{Color, Package};
 use mcospkg::{extract, rust_install_pkg, rust_remove_pkg};

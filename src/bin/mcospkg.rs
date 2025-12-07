@@ -32,10 +32,9 @@
 /// For more information, type: `mcospkg -h`
 //
 // Now, we need to import some modules:
-mod config;
+use mcospkg::VERSION;
 use clap::{Parser, Subcommand};
 use colored::Colorize;
-use config::VERSION;
 use is_root::is_root;
 use mcospkg::get_installed_package_info;
 use mcospkg::{Color, INSTALL_DATA, REMOVE_DATA};

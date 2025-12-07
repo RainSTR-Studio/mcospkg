@@ -13,7 +13,7 @@
 /// Line 111-126 is the usage of this file.
 /// (NOTE: The `src/main.rs` maybe update so that the lines may change.)
 use colored::Colorize;
-use mcospkg::{Color, download, readcfg};
+use crate::{Color, download, readcfg};
 use std::process::{Command, exit};
 
 // The type-alias

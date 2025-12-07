@@ -1,15 +1,9 @@
 // First, import some modules we need
-mod config;
-mod mirror {
-    pub mod add;
-    pub mod update;
-}
+use mcospkg::mirror::{update::UpdateData, add::AddData};
 use clap::{Parser, Subcommand};
-use config::VERSION;
+use mcospkg::VERSION;
 use is_root::is_root;
 use mcospkg::Color;
-use mirror::add::AddData;
-use mirror::update::UpdateData;
 use std::process::exit;
 
 // And then we define the arguments

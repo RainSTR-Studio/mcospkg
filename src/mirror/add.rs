@@ -12,7 +12,7 @@
 /// The usage of this file is in src/main.rs.
 /// Line 111-126 is the usage of this file.
 /// (NOTE: The `src/main.rs` maybe update so that the lines may change.)
-use mcospkg::Color;
+use crate::Color;
 use std::error::Error;
 use std::fs::OpenOptions;
 use std::io::Write;
