@@ -11,8 +11,7 @@
 /// For more usages, see the doc in "src/lib.rs"
 // Import some modules
 use crate::{
-    Color, ErrorCode, Message, Package, PkgInfoToml, get_installed_package_info,
-    set_executable_permission, set_installed_package_info,
+    Color, ErrorCode, Message, Package, PkgInfoToml, get_installed_package_info, set_installed_package_info,
 };
 use chrono::Local;
 use colored::Colorize;
@@ -23,6 +22,9 @@ use std::path::Path;
 use std::process::Command;
 use std::time::Duration;
 use walkdir::WalkDir;
+
+#[cfg(target_os = "linux")]
+use crate::set_executable_permission;
 
 /// This will help you to check the package type, and return
 /// a string, which is the type of the package.
@@ -79,6 +81,8 @@ fn step2_build(
 
     // Then, preset some metadata
     let build_script_path = format!("{}/BUILD-SCRIPT", workdir);
+
+    #[cfg(target_os = "linux")]
     set_executable_permission(&build_script_path)?;
 
     // And set the log path
@@ -193,6 +197,8 @@ fn step2_copy(
     // First, run the hook
     if hooks.exists() {
         let build_script_path = "/HOOKS";
+
+        #[cfg(target_os = "linux")]
         set_executable_permission(build_script_path)?;
 
         let status = Command::new("sh")

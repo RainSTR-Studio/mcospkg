@@ -1,5 +1,5 @@
 use crate::{
-    Color, ErrorCode, Message, get_installed_package_info, set_executable_permission,
+    Color, ErrorCode, Message, get_installed_package_info,
     set_installed_package_info,
 };
 use indicatif::{ProgressBar, ProgressStyle};
@@ -7,6 +7,9 @@ use serde::Deserialize;
 use std::fs::remove_file;
 use std::path::Path;
 use std::process::Command;
+
+#[cfg(target_os = "linux")]
+use crate::set_executable_permission;
 
 /* =====JSON format area===== */
 // This only used for parsing the remove files into a vector.
@@ -126,6 +129,7 @@ pub fn remove_pkg(packages: &[String]) -> Result<(), ErrorCode> {
         let place_to_unhook = format!("/etc/mcospkg/database/remove_info/{}-UNHOOKS", package);
 
         // Set up permission
+        #[cfg(target_os = "linux")]
         set_executable_permission(&place_to_unhook)?;
 
         // Then run

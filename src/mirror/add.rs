@@ -12,7 +12,7 @@
 /// The usage of this file is in src/main.rs.
 /// Line 111-126 is the usage of this file.
 /// (NOTE: The `src/main.rs` maybe update so that the lines may change.)
-use crate::Color;
+use crate::{Color, config::ROOTDIR};
 use std::error::Error;
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -26,19 +26,21 @@ pub struct AddData {
 
 impl AddData {
     pub fn new() -> Self {
-        Self {
-            repofile: OpenOptions::new()
-                .write(true)
-                .append(true)
-                .open("/etc/mcospkg/repo.conf"),
+        let target_dir = format!("{}/etc/mcospkg/repo.conf", ROOTDIR);
+
+        // Check is target file exists.
+        if !std::path::Path::new(&target_dir).exists() {
+            let _ = std::fs::File::create(&target_dir);
         }
+        let repofile = OpenOptions::new()
+            .write(true)
+            .append(true)
+            .open(target_dir);
+
+        Self { repofile }
     }
 
-    pub fn step_matches(
-        &mut self,
-        reponame: String,
-        repourl: String,
-    ) -> Result<(), Box<dyn Error>> {
+    pub fn step_matches(&mut self, reponame: String, repourl: String) -> Result<(), Box<dyn Error>> {
         let color = Color::new();
 
         match &mut self.repofile {

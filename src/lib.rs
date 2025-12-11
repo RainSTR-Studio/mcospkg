@@ -24,11 +24,13 @@ use std::collections::HashMap;
 use std::ffi::{CStr, c_char, c_int};
 use std::fs::{self, File};
 use std::io::{Error, ErrorKind, Read, Write};
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::exit;
 use tar::Archive;
 use xz2::read::XzDecoder;
+
+#[cfg(target_os = "linux")]
+use std::os::unix::fs::PermissionsExt;
 
 // Type annotions area
 pub type Message = std::borrow::Cow<'static, str>;
@@ -38,9 +40,11 @@ pub use pkgmgr::install_pkg as rust_install_pkg;
 pub use pkgmgr::remove_pkg as rust_remove_pkg;
 pub use config::VERSION;
 
+use crate::config::ROOTDIR;
+
 // =====Global Data Define Area=====
 lazy_static! {
-    /// The Global Install Data.
+    /// The GOSbal Install Data.
     pub static ref  INSTALL_DATA: InstallData = InstallData::new();
 
     /// The Global Remove Data.
@@ -259,10 +263,10 @@ impl Package {
 /// The format is: `[reponame] = [repourl]`
 pub fn readcfg() -> Result<HashMap<String, String>, Error> {
     // First, read the configuration
-    let mut repoconf_raw = fs::read_to_string("/etc/mcospkg/repo.conf").map_err(|_| {
+    let mut repoconf_raw = fs::read_to_string(format!("{}/etc/mcospkg/repo.conf", ROOTDIR)).map_err(|_| {
         Error::new(
             ErrorKind::Other,
-            "Repository config file \"/etc/mcospkg/repo.conf\" not found",
+            format!("Repository config file \"{}/etc/mcospkg/repo.conf\" not found", ROOTDIR),
         )
     })?;
 
@@ -419,6 +423,9 @@ fn create_dir() -> Result<PathBuf, std::io::Error> {
 }
 
 /// Set up the permission to executable permission.
+/// 
+/// Available on unix/linux.
+#[cfg(target_os = "linux")]
 pub fn set_executable_permission(file: &str) -> Result<(), ErrorCode> {
     let permission = fs::Permissions::from_mode(0o755);
     let path = Path::new(file);

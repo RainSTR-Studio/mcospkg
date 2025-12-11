@@ -6,3 +6,12 @@
 
 /// The version, a &str.
 pub const VERSION: &str = "v0.9.2 (Build 9189)";
+
+/// The root directory.
+/// 
+/// It'll be different in each platforms.
+#[cfg(target_os = "linux")]
+pub const ROOTDIR: &str = "/";
+
+#[cfg(target_os = "windows")]
+pub const ROOTDIR: &str = ".";

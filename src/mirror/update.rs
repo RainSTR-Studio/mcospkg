@@ -1,3 +1,4 @@
+use crate::{Color, config::ROOTDIR, download, readcfg};
 /// ## Information
 /// Position: src/mirror/update.rs
 /// Usage: The update library of src/mirror.rs
@@ -13,8 +14,10 @@
 /// Line 111-126 is the usage of this file.
 /// (NOTE: The `src/main.rs` maybe update so that the lines may change.)
 use colored::Colorize;
-use crate::{Color, download, readcfg};
-use std::process::{Command, exit};
+use std::{
+    path::Path,
+    process::exit
+};
 
 // The type-alias
 type Message = std::borrow::Cow<'static, str>;
@@ -68,16 +71,15 @@ impl UpdateData {
 
         // Third, create the dir if not exist
         // Dir we store database: /etc/mcospkg/database/remote
-        if !std::path::Path::new("/etc/mcospkg/database/remote").exists() {
+        if !std::path::Path::new(&format!("{}/etc/mcospkg/database/remote", ROOTDIR)).exists() {
             println!(
-                "{}: Creating directory /etc/mcospkg/database/remote...",
-                color.info
+                "{}: Creating directory {}/etc/mcospkg/database/remote...",
+                color.info, ROOTDIR
             );
-            match Command::new("mkdir")
-                .arg("-p")
-                .arg("/etc/mcospkg/database/remote")
-                .status()
-            {
+            match std::fs::create_dir_all(Path::new(&format!(
+                "{}/etc/mcospkg/database/remote",
+                ROOTDIR
+            ))) {
                 Ok(_) => {}
                 Err(e) => {
                     eprintln!("{}: {}", color.error, e);
@@ -100,7 +102,7 @@ impl UpdateData {
         {
             if let Err(errmsg) = download(
                 &format!("{}/PKGINDEX.json", repourl),
-                &format!("/etc/mcospkg/database/remote/{}.json", reponame),
+                &format!("{}/etc/mcospkg/database/remote/{}.json", ROOTDIR, reponame),
                 msg.clone(),
             ) {
                 eprintln!("{}: {}", color.error, errmsg);
