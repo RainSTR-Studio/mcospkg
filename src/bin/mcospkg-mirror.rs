@@ -1,9 +1,9 @@
 // First, import some modules we need
-use mcospkg::mirror::{update::UpdateData, add::AddData};
 use clap::{Parser, Subcommand};
-use mcospkg::VERSION;
 use is_root::is_root;
 use mcospkg::Color;
+use mcospkg::VERSION;
+use mcospkg::mirror::{add::AddData, update::UpdateData};
 use std::process::exit;
 
 // And then we define the arguments
@@ -41,7 +41,8 @@ fn main() {
     let color = Color::new();
     let args = Args::parse();
 
-    // Make sure that the user is root.
+    // Make sure that the user is root. (only Linux)
+    #[cfg(target_os = "linux")]
     if !is_root() {
         eprintln!(
             "{}: You must run this program with root privileges.",
