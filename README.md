@@ -1,12 +1,16 @@
-# Mcospkg
-Welcome to use mcospkg, a linux package manager by a 13-year-old boy
+# Mcospkg - A powerful package manager by a little guy ✨
+Welcome to use mcospkg!
 
-This project uses in MinecraftOS, a **linux** operating system for Minecraft players
+Now I wonder this project will available in both Windows and linux, and it is being popular soon 😏
+
+Note that this project uses GPL-3.0 License, please follow the rules of that license, thanks!
+
+For more infomation, please type `mcospkg-info` after the installation.
 
 ## Description
 This project imagine by a 12-year-old boy (THE SAME PERSON) at first, cause there's less package manager by Chinese, so as a Chinese young man and developer, I, and my team, will take this mission on.
 
-## Extension Documents
+## Extra Documents
 For more documents, please look at the directory `docs/`
 
 如果你是中国人🇨🇳, 那么我们贴心地准备了翻译(在`docs/Chinese`下)
@@ -15,7 +19,7 @@ For more documents, please look at the directory `docs/`
 If you have installed mcospkg, just run this command:
 `sudo mcospkg update mcospkg`
 
-To build it, ensure you had installed these applications(packages):
+To build it, ensure you had installed these applications(packages) on Linux:
 
  - Rust(stable, latest, with Cargo)
  - gcc/clang(with cc)
@@ -23,9 +27,11 @@ To build it, ensure you had installed these applications(packages):
  - pkg-config
  - git
 
+For Windows platform, seems you just need to install MSVC (latest), and it will be compiled successfully.
+
 After installing them, follow these steps:
 
-1, Clone from repository
+1. Clone from repository
 
 Run these commands:
 
@@ -34,7 +40,7 @@ git clone https://github.com/zhangxuan2011/mcospkg.git
 cd mcospkg
 ```
 
-2, Build
+2. Build
 Run this command to build this project:
 
 `cargo build --release -j8`
@@ -43,7 +49,7 @@ In this, you can specify the building jobs (In this example, Jobs = 8)
 
 **NOTE**!!!! You must specify the argument `--release` otherwise you **CAN'T** do more steps in this building process. 
 
-3, Install
+3. Install
 
 Run the `install.sh` we've given:
 
