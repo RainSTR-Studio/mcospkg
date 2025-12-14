@@ -1,3 +1,6 @@
+use clap::{Parser, Subcommand};
+use colored::Colorize;
+use is_root::is_root;
 /// This file contains the executable file `mcospkg`.
 ///
 /// # Usage
@@ -33,9 +36,6 @@
 //
 // Now, we need to import some modules:
 use mcospkg::VERSION;
-use clap::{Parser, Subcommand};
-use colored::Colorize;
-use is_root::is_root;
 use mcospkg::get_installed_package_info;
 use mcospkg::{Color, INSTALL_DATA, REMOVE_DATA};
 use std::process::exit;
@@ -114,7 +114,8 @@ fn main() {
     // Parse arguments
     let args = Args::parse();
 
-    // Make sure that the user is root.
+    // Make sure that the user is root. (only Linux)
+    #[cfg(target_os = "linux")]
     if !is_root() {
         eprintln!(
             "{}: You must run this program with root privileges.",

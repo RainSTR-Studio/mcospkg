@@ -22,8 +22,8 @@
 ///
 // Include some modules
 use clap::{Parser, Subcommand};
-use mcospkg::VERSION;
 use is_root::is_root;
+use mcospkg::VERSION;
 use mcospkg::{Color, Package};
 use mcospkg::{extract, rust_install_pkg, rust_remove_pkg};
 use std::process::exit;
@@ -64,7 +64,8 @@ fn main() {
     let args = Args::parse();
     let color = Color::new();
 
-    // Make sure that it runs on root privilege
+    // Make sure that it runs on root privilege (only Linux)
+    #[cfg(target_os = "linux")]
     if !is_root() {
         eprintln!(
             "{}: You must run this program with root privileges.",
