@@ -5,7 +5,7 @@
 /// Options later.
 
 /// The version, a &str.
-pub const VERSION: &str = "v0.9.2 (Build 9189)";
+pub const VERSION: &str = "v0.9.2 (Build 9192)";
 
 /// The root directory.
 /// 
@@ -14,4 +14,4 @@ pub const VERSION: &str = "v0.9.2 (Build 9189)";
 pub const ROOTDIR: &str = "/";
 
 #[cfg(target_os = "windows")]
-pub const ROOTDIR: &str = ".";
+pub const ROOTDIR: &str = "C:\\mcospkg";
