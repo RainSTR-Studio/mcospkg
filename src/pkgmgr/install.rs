@@ -49,12 +49,17 @@ fn step1_check_pkg_instype(workdir: &str) -> String {
         return String::from("invalid");
     }
 
-    // Then check the path
+    // Then check the path (linux only)
+    #[cfg(target_os = "linux")]
     if build_path.exists() {
         String::from("build")
     } else {
         String::from("copy")
     }
+
+    // For Windows, just need return "copy".
+    #[cfg(target_os = "windows")]
+    String::from("copy")
 }
 
 /// This is the step 2, but for build only.

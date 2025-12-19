@@ -32,7 +32,7 @@
 use colored::Colorize;
 use ctrlc::set_handler;
 use dialoguer::Input;
-use crate::{Color, Message, Package, download, extract, readcfg, rust_install_pkg};
+use crate::{Color, Message, Package, download, extract, readcfg, rust_install_pkg, config::ROOTDIR};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{HashMap, HashSet};
@@ -119,7 +119,7 @@ impl InstallData {
         let _repopath: String = String::new(); //  We'll use it later
         let mut errtime = 0; // This will record the error times
         for (reponame, _) in &self.repoindex {
-            let repopath = format!("/etc/mcospkg/database/remote/{}.json", reponame);
+            let repopath = format!("{}/etc/mcospkg/database/remote/{}.json", ROOTDIR, reponame);
             // If index not exist, just quit
             if !Path::new(&repopath).exists() {
                 if errtime == 0 {
@@ -144,7 +144,7 @@ impl InstallData {
         // And, read the PKGINDEX
         for (reponame, _) in &self.repoindex {
             // Read and parse the index
-            let indexpath = format!("/etc/mcospkg/database/remote/{}.json", reponame);
+            let indexpath = format!("{}/etc/mcospkg/database/remote/{}.json", ROOTDIR, reponame);
             let index_raw = std::fs::read_to_string(&indexpath).unwrap();
             let index: PkgIndex = serde_json::from_str(&index_raw).unwrap_or_else(|_| {
                 println!("{}", color.failed);
@@ -264,12 +264,12 @@ impl InstallData {
         // If it is not exist, we need to ask user if they want to install it
 
         // First, read it
-        let binding = fs::read_to_string("/etc/mcospkg/database/packages.toml")
+        let binding = fs::read_to_string(format!("{}/etc/mcospkg/database/packages.toml", ROOTDIR))
             .unwrap_or_else(|err| {
                 println!("{}", color.failed);
                 eprintln!(
-                    "{}: Cannot read \"/etc/mcospkg/database/packages.toml\": {}",
-                    color.error, err
+                    "{}: Cannot read \"{}/etc/mcospkg/database/packages.toml\": {}",
+                    color.error, ROOTDIR, err
                 );
                 exit(1);
             })
@@ -355,10 +355,10 @@ impl InstallData {
         // So we need to check if the directory is exist
         // If it is not exist, we need to create it
         println!("{}: Downloading packages... ", color.info);
-        let cache_path = "/var/cache/mcospkg";
-        if !Path::new(cache_path).exists() {
-            std::fs::create_dir(cache_path).unwrap();
-        } else if !Path::new(cache_path).is_dir() {
+        let cache_path = format!("{}/var/cache/mcospkg", ROOTDIR);
+        if !Path::new(&cache_path).exists() {
+            std::fs::create_dir(&cache_path).unwrap();
+        } else if !Path::new(&cache_path).is_dir() {
             eprintln!(
                 "{}: The cache path is not a directory. Please make it to a dir",
                 color.error
@@ -445,7 +445,7 @@ impl InstallData {
             // Get the file name
             let file = &self.pkgindex.get(pkg).unwrap().filename;
             // Get the full path
-            let full_path = format!("/var/cache/mcospkg/{}", file);
+            let full_path = format!("{}/var/cache/mcospkg/{}", ROOTDIR, file);
             // Then calculate its sums
             let file_sums = Self::vaildate_sums(&full_path).unwrap();
             // Check
