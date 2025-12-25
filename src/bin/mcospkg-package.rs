@@ -22,11 +22,13 @@
 ///
 // Include some modules
 use clap::{Parser, Subcommand};
-use is_root::is_root;
 use mcospkg::VERSION;
 use mcospkg::{Color, Package};
 use mcospkg::{extract, rust_install_pkg, rust_remove_pkg};
 use std::process::exit;
+
+#[cfg(target_os = "linux")]
+use is_root::is_root;
 
 // Define args
 #[derive(Parser, Debug)]

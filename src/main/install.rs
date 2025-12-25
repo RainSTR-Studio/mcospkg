@@ -1,3 +1,6 @@
+use crate::{
+    Color, Message, Package, config::ROOTDIR, download, extract, readcfg, rust_install_pkg,
+};
 /// ## Information
 /// Position: src/main/install.rs
 /// Usage: The install library of src/main.rs
@@ -32,7 +35,6 @@
 use colored::Colorize;
 use ctrlc::set_handler;
 use dialoguer::Input;
-use crate::{Color, Message, Package, download, extract, readcfg, rust_install_pkg, config::ROOTDIR};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{HashMap, HashSet};
@@ -163,7 +165,10 @@ impl InstallData {
             let cpu_arch = std::env::consts::ARCH;
             if index.arch != cpu_arch {
                 println!("{}", color.failed);
-                eprintln!("{}: This repository does not support this platform.", color.error);
+                eprintln!(
+                    "{}: This repository does not support this platform.",
+                    color.error
+                );
                 exit(1);
             }
 

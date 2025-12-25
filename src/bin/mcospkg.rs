@@ -1,6 +1,3 @@
-use clap::{Parser, Subcommand};
-use colored::Colorize;
-use is_root::is_root;
 /// This file contains the executable file `mcospkg`.
 ///
 /// # Usage
@@ -35,9 +32,15 @@ use is_root::is_root;
 /// For more information, type: `mcospkg -h`
 //
 // Now, we need to import some modules:
+use clap::{Parser, Subcommand};
+use colored::Colorize;
 use mcospkg::VERSION;
 use mcospkg::get_installed_package_info;
 use mcospkg::{Color, INSTALL_DATA, REMOVE_DATA};
+
+#[cfg(target_os = "linux")]
+use is_root::is_root;
+#[cfg(target_os = "linux")]
 use std::process::exit;
 
 // ========structs define area=========
@@ -109,6 +112,7 @@ enum Operations {
 
 // ========functions define area==========
 fn main() {
+    #[cfg(target_os = "linux")]
     let color = Color::new();
 
     // Parse arguments

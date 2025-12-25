@@ -14,10 +14,7 @@ use crate::{Color, config::ROOTDIR, download, readcfg};
 /// Line 111-126 is the usage of this file.
 /// (NOTE: The `src/main.rs` maybe update so that the lines may change.)
 use colored::Colorize;
-use std::{
-    path::Path,
-    process::exit
-};
+use std::{path::Path, process::exit};
 
 // The type-alias
 type Message = std::borrow::Cow<'static, str>;

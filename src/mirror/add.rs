@@ -32,15 +32,16 @@ impl AddData {
         if !std::path::Path::new(&target_dir).exists() {
             let _ = std::fs::File::create(&target_dir);
         }
-        let repofile = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .open(target_dir);
+        let repofile = OpenOptions::new().write(true).append(true).open(target_dir);
 
         Self { repofile }
     }
 
-    pub fn step_matches(&mut self, reponame: String, repourl: String) -> Result<(), Box<dyn Error>> {
+    pub fn step_matches(
+        &mut self,
+        reponame: String,
+        repourl: String,
+    ) -> Result<(), Box<dyn Error>> {
         let color = Color::new();
 
         match &mut self.repofile {

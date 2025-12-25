@@ -9,8 +9,8 @@
 // First, we need to import some modules:
 use clap::Parser; // To parse argument(info-type)
 use colored::Colorize; // To show colorful text(in var "error")
-use mcospkg::VERSION;
 use mcospkg::Color;
+use mcospkg::VERSION;
 
 // And, set up the parser information:
 #[derive(Parser, Debug)]

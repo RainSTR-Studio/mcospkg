@@ -11,7 +11,8 @@
 /// For more usages, see the doc in "src/lib.rs"
 // Import some modules
 use crate::{
-    Color, ErrorCode, Message, Package, PkgInfoToml, get_installed_package_info, set_installed_package_info,
+    Color, ErrorCode, Message, Package, PkgInfoToml, get_installed_package_info,
+    set_installed_package_info,
 };
 use chrono::Local;
 use colored::Colorize;
@@ -36,10 +37,12 @@ use crate::set_executable_permission;
 fn step1_check_pkg_instype(workdir: &str) -> String {
     // First, we needs to check is the package is valid.
     // Presets
-    let build_script_path = format!("{}/BUILD-SCRIPT", workdir);
+    #[cfg(target_os = "linux")]
+    let build_script_path = format!("{}/BUILD-SCRIPT", workdir);    // Only used in linux, build
     let hooks_script_path = format!("{}/HOOKS", workdir);
     let unhooks_script_path = format!("{}/UNHOOKS", workdir);
-    let build_path = Path::new(build_script_path.as_str());
+    #[cfg(target_os = "linux")]
+    let build_path = Path::new(build_script_path.as_str()); // Only used in linux, build
     let hooks_path = Path::new(hooks_script_path.as_str());
     let unhooks_path = Path::new(unhooks_script_path.as_str());
 

@@ -1,9 +1,12 @@
 // First, import some modules we need
 use clap::{Parser, Subcommand};
+#[cfg(target_os = "linux")]
 use is_root::is_root;
+#[cfg(target_os = "linux")]
 use mcospkg::Color;
 use mcospkg::VERSION;
 use mcospkg::mirror::{add::AddData, update::UpdateData};
+#[cfg(target_os = "linux")]
 use std::process::exit;
 
 // And then we define the arguments
@@ -38,6 +41,7 @@ enum Operations {
 }
 
 fn main() {
+    #[cfg(target_os = "linux")]
     let color = Color::new();
     let args = Args::parse();
 

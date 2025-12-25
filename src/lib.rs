@@ -8,17 +8,17 @@ mod main {
     pub mod remove;
 }
 pub mod mirror {
-    pub mod update;
     pub mod add;
+    pub mod update;
 }
-mod pkgmgr;
 mod config;
+mod pkgmgr;
 use colored::{ColoredString, Colorize};
 use indicatif::{ProgressBar, ProgressStyle};
 use lazy_static::lazy_static;
+use main::{install::InstallData, remove::RemoveData};
 use rand::prelude::*;
 use reqwest::blocking::get;
-use main::{install::InstallData, remove::RemoveData};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ffi::{CStr, c_char, c_int};
@@ -36,9 +36,9 @@ use std::os::unix::fs::PermissionsExt;
 pub type Message = std::borrow::Cow<'static, str>;
 
 // Public area
+pub use config::VERSION;
 pub use pkgmgr::install_pkg as rust_install_pkg;
 pub use pkgmgr::remove_pkg as rust_remove_pkg;
-pub use config::VERSION;
 
 use crate::config::ROOTDIR;
 
@@ -263,12 +263,16 @@ impl Package {
 /// The format is: `[reponame] = [repourl]`
 pub fn readcfg() -> Result<HashMap<String, String>, Error> {
     // First, read the configuration
-    let mut repoconf_raw = fs::read_to_string(format!("{}/etc/mcospkg/repo.conf", ROOTDIR)).map_err(|_| {
-        Error::new(
-            ErrorKind::Other,
-            format!("Repository config file \"{}/etc/mcospkg/repo.conf\" not found", ROOTDIR),
-        )
-    })?;
+    let mut repoconf_raw = fs::read_to_string(format!("{}/etc/mcospkg/repo.conf", ROOTDIR))
+        .map_err(|_| {
+            Error::new(
+                ErrorKind::Other,
+                format!(
+                    "Repository config file \"{}/etc/mcospkg/repo.conf\" not found",
+                    ROOTDIR
+                ),
+            )
+        })?;
 
     // Second, make it cleaner
     repoconf_raw = repoconf_raw.replace(" ", "").replace("\t", "");
@@ -423,7 +427,7 @@ fn create_dir() -> Result<PathBuf, std::io::Error> {
 }
 
 /// Set up the permission to executable permission.
-/// 
+///
 /// Available on unix/linux.
 #[cfg(target_os = "linux")]
 pub fn set_executable_permission(file: &str) -> Result<(), ErrorCode> {

@@ -1,7 +1,4 @@
-use crate::{
-    Color, ErrorCode, Message, get_installed_package_info,
-    set_installed_package_info,
-};
+use crate::{Color, ErrorCode, Message, get_installed_package_info, set_installed_package_info};
 use indicatif::{ProgressBar, ProgressStyle};
 use serde::Deserialize;
 use std::fs::remove_file;
