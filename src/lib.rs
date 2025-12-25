@@ -418,7 +418,7 @@ fn create_dir() -> Result<PathBuf, std::io::Error> {
         random_suffix.push(charset.chars().nth(random_index).unwrap());
     }
 
-    let mut target_dir = PathBuf::from("/tmp");
+    let mut target_dir = PathBuf::from(format!("{}/tmp", config::ROOTDIR));
     target_dir.push(format!("mcospkg{}", random_suffix));
 
     fs::create_dir(&target_dir)?;
